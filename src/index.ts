@@ -6,7 +6,7 @@ import { ActivityType, Client, Collection, Events, GatewayIntentBits } from 'dis
 import { channels } from './config.js';
 import type { SlashCommand, UserCommand, MessageCommand } from './types/index.js';
 import { loadCommands } from './handlers/command.js';
-import './handlers/interaction.js';
+import { loadInteractions } from './handlers/interaction.js';
 
 const client = new Client({ intents: Object.values(GatewayIntentBits) as number[] });
 client.slash_commands = new Collection<string, SlashCommand>();
@@ -17,6 +17,7 @@ export default client;
 
 client.once(Events.ClientReady, async () => {
     await loadCommands(client);
+    loadInteractions(client);
     client.user!.setPresence({ activities: [{ name: 'by yPandinho', type: ActivityType.Playing }], status: 'online' });
     console.log(`[Bot] Online como ${client.user!.username}`);
 });
