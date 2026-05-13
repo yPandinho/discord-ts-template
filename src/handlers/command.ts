@@ -1,7 +1,7 @@
 import { ApplicationCommandType, Client, REST, Routes } from 'discord.js';
 import { readdirSync } from 'fs';
 import { join, dirname } from 'path';
-import { fileURLToPath } from 'url';
+import { fileURLToPath, pathToFileURL } from 'url';
 import type { SlashCommand, UserCommand, MessageCommand } from '../types/index.js';
 import { guilds } from '../config.js';
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -9,14 +9,14 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 export async function loadCommands(client: Client): Promise<void> {
     const commandsPath = join(__dirname, '../commands');
     const categories = readdirSync(commandsPath);
-    const commandsData = [];
+    const commandsData: object[] = [];
 
     for (const category of categories) {
         const categoryPath = join(commandsPath, category);
-        const files = readdirSync(categoryPath).filter(f => f.endsWith('.js'));
+        const files = readdirSync(categoryPath).filter(f => f.endsWith('.ts') || f.endsWith('.js'));
 
         for (const file of files) {
-            const module = await import(`${categoryPath}/${file}`);
+            const module = await import(pathToFileURL(`${categoryPath}/${file}`).href);
             const command: SlashCommand | UserCommand | MessageCommand = module.default;
 
             if ('options' in command || command.type === ApplicationCommandType.ChatInput) {
