@@ -6,6 +6,7 @@ import { ActivityType, Client, Collection, Events, GatewayIntentBits } from 'dis
 import { channels } from './config.js';
 import type { SlashCommand, UserCommand, MessageCommand } from './types/index.js';
 import { loadCommands } from './handlers/command.js';
+import './handlers/interaction.js';
 
 const client = new Client({ intents: Object.values(GatewayIntentBits) as number[] });
 client.slash_commands = new Collection<string, SlashCommand>();
