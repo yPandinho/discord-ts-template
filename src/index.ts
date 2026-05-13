@@ -1,4 +1,4 @@
-// Template Ranked Bot
+// Template Discord Bot
 // Developed by yPandinho
 
 import 'dotenv/config';
